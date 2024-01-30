@@ -1,0 +1,36 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: microservices
+  labels:
+    app: microservices
+spec:
+  type: NodePort
+  selector:
+    app: microservices
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: microservices
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microservices
+  template:
+    metadata:
+      labels:
+        app: microservices
+        version: v1
+    spec:
+      containers:
+      - name: microservices
+        image: microservices
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
